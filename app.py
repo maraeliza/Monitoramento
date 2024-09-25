@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file
 from sendEmail import * 
 import os
 import requests
@@ -18,16 +18,16 @@ def getData():
         data = request.get_json()
         print("Recebendo dados: ", data)
         if data:
-            print(data)
+            print("Dados recebidos",data)
             resultado = buscarDados(data)
-            
+            print("Resultado da consulta",data)
             return jsonify({"result": resultado}), 200
         return jsonify({"error": "Data not found"}), 404
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
-
+    
 @app.route('/')
 def index():
     return render_template('index.html')

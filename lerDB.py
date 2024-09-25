@@ -13,6 +13,8 @@ from os.path import basename
 import smtplib
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
+from flask import send_file
+import io
 load_dotenv()
 host = os.getenv('DB_HOST')
 user = os.getenv('DB_USER')
@@ -22,6 +24,15 @@ banco = "advogados_iturn"
 import json
 def teste():
     print("Teste")
+
+def criarPasta (pasta):
+    
+    if os.path.exists(pasta) == False:
+        os.makedirs(pasta)
+        
+    return len(os.listdir(pasta))
+        
+
     
 def process_file(dataInicio, dataFim, status, idEmpresa):
     print("lendo a função process_file")
@@ -38,22 +49,33 @@ def process_file(dataInicio, dataFim, status, idEmpresa):
             cursor = connection.cursor()
             print("dataFim: ", dataFim)
             print("dataInicio: ", dataInicio)
-            if dataFim == "":
-                print("dataFim é vazio")
-                query = f'select id_empresa, id_tabela,status,ultimo_update, data_emissao, tabela from tb_notas_fiscais where data_emissao > {dataInicio}'
-            else:
-                query = f'select id_empresa, id_tabela,status, data_emissao, tabela from tb_notas_fiscais where data_emissao > {dataInicio} and data_emissao < {dataFim}'
-
+            query = f"select id_empresa, id_tabela,status,ultimo_update, data_emissao, tabela from tb_notas_fiscais where data_emissao > '{dataInicio}'"
+            if dataFim != "":
+                query += f" and data_emissao < '{dataFim}'"
+            
+            if int(status) != 0:
+                lista_status = [
+                    '',
+                    "ERROR",
+                    "SCHEDULED",
+                    "AUTHORIZED",
+                    "CANCELED"
+                ]
+                status = int(status)
+                query += f" and status = '{lista_status[status]}'"
+            if idEmpresa != "":
+                query += f" and id_empresa = '{idEmpresa}'"
             print(query)
             print("\nexecutando o select\n")
-            #cursor.execute(query)
-            #records = cursor.fetchall()
-            #for record in records:
-                #print(record)
-           
-                                
-            cursor.close()
+            cursor.execute(query)
+            records = cursor.fetchall()
             
+            lista_resultados = []
+            for r in records:
+                lista_resultados.append(list(r))
+            
+                    
+            return lista_resultados
 
     except Error as e:
         print("Erro ao conectar ao MySQL", e)
@@ -64,7 +86,14 @@ def process_file(dataInicio, dataFim, status, idEmpresa):
 def buscarDados(data):
     print("lendo a função buscarDados")
     print(data)
-    print("lendo no banco de dados")
-    process_file(data['dataInicio'], data['dataFim'], data['status'], data['idEmpresa'])
-    return data
+   
+    lista = process_file(data['dataInicio'], data['dataFim'], data['status'], data['idEmpresa'])
+    
+    if data['baixar'] == True:
+        print('baixar arquivo')
+        
+    if data['enviarEmail'] == True:
+        print('enviar arquivo por email')
+    
+    return lista
 

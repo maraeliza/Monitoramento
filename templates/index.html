@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!--SWAL 2-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+        <!--SWAL 2-->
     <script src="
     https://cdn.jsdelivr.net/npm/sweetalert2@11.12.4/dist/sweetalert2.all.min.js
     "></script>
@@ -47,75 +50,77 @@
 
     <!--LOCAL-->
     <link rel="stylesheet" href="../static/css/style.css">
-
+    
+    <!--DATATABLE-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.7/css/dataTables.dataTables.css" />
+    <script src="https://cdn.datatables.net/2.1.7/js/dataTables.js"></script>
+    
+    <!--CHART-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!--Titulo-->
     <link rel="icon" href="../static/imgs/clock.ico" type="image/x-icon">
     <title>ProSuporte</title>
 </head>
 
 <body id="site" >
-
+    <header class="navbar">
+        <img src="../static/imgs/logo-empresa.png">
+    </header>
      
     <div class="container">              
-        <h2 class="page-header">Sistema de monitoramento de emissão de notas fiscais da EasyJur</h2> 
+        <h2 class="page-header text-center">Emissão de Notas Fiscais</h2> 
         
         <div>
-            <div>
-                <select id="modoFiltro">
-                    <option value="0">Selecione como deseja filtrar o período</option>
-                    <option value="setPeriodo">DEFINIR PERÍODO</option>
-                    <option value="setModo">POR PERÍODO</option>
-                </select>
-
-                <div id="setPeriodo">
-                    <h3>POR PERÍODO</h3>
+            <div class=" divBtns  ">
+                    <button title="Limpar Campos" id="btnLimpar" class="btn"><img src="../static/imgs/repetir.png"></button>
+                    <button title="Enviar para o e-mail" id="btnEnviar" class="btn"><img src="../static/imgs/email_enviar.png"></button>
+                    <button title="Fazer Download" id="btnBaixar" class="btn"><img src="../static/imgs/baixar.png"></button>
+                        
+                </div>
+            <div class="campos">
                 
-                    <label>Escolha o período: </label>
-                    <input  class="form-control" id="dataInicio">
-                    <input class="form-control" id="dataFim">
+                <div class="form-group divOp col-lg-4 col-md-4" id="setPeriodo">
+                    <h4>Período</h4>
+                
+                    <input placeholder="Data de início"  class="campoData form-control col-lg-4 col-md-6" id="dataInicio">
+                    <input placeholder="Data final" class="campoData form-control col-lg-4 col-md-6" id="dataFim">
                 </div>
 
-                <br>
-                <div id="setModo">
-                    <h3>POR MODO</h3>
-                    <select id="modo">
-                        <option value="dia">HOJE</option>
-                        <option value="sem">ESSA SEMANAL</option>
-                        <option value="mes">ESSE MÊS</option>
-                    </select>
-                </div>
-                
-                <br>
-                <div class="setStatus">
-                    <label>Defina o status da nota fiscal</label>
-                    <select id="status">
+                <div class="form-group divOp setStatus col-lg-4 col-md-4 ">
+
+                    <h4>Status da nota fiscal</h4>
+                    <select  id="status">
                         <option value="0">Selecione o status da nota fiscal</option>
                         <option value="1">ERRO</option>
                         <option value="2">AGENDADA</option>
                         <option value="3">EMITIDA</option>
-    
+                        <option value="4">CANCELADA</option>
                     </select>
                 </div>
                
-                <br><br>
-                <div id="setId">
-                    <label>Digite o ID da empresa</label>
-                    <input class="form-control" id="idEmpresa" placeholder="Digite o id da empresa">
+                <div id="setId" class=" divOp col-lg-4 col-md-4">
+                    <h4> ID da empresa</h4>
+                    <input class="form-control" id="idEmpresa" placeholder="ID da empresa">
                 
                 </div>
-                <br><br>
-                <button id="btnPesquisar" class="btn btn-primary">Pesquisar</button>
-                <button id="btnLimpar" class="btn btn-primary">Limpar</button>
-                <button id="btnEnviar" class="btn btn-success">Enviar por email</button>
+                     
                 
+                <button title="Pesquisar" id="btnPesquisar" class="btn" >
+                    <img src="../static/imgs/pesquisar2.png">
+                    Pesquisar 
+                </button>
+              
             </div>
         
         </div>
 
-        <div>
-            <br>
-            <div> Resultados </div>
-            <div id="resultados"></div>
+        <div class="res">
+            <center>
+                <table id="tb_resultados"></table>
+                <div style="width: 800px;"><canvas id="grafico"></canvas></div>
+            </center>
+           
+
         </div>
     </div>
 
