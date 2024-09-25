@@ -1,6 +1,8 @@
 $(document).ready(() => {
 
-
+  $("#tabelaDiv").hide()
+  $("#graficoDiv").hide()
+  
 
 
   $("#dataInicio").datepicker({
@@ -149,8 +151,10 @@ function exibirDados(data) {
         "sortDescending": ": ativar para ordenar a coluna em ordem decrescente"
       }
     }
-
+    
   })
+  $("#tabelaDiv").show()
+ 
 }
 
 function enviarDados(formulario, baixar, enviarEmail) {
@@ -337,6 +341,7 @@ function criarGrafico(grafico, status) {
     "SCHEDULED": ["#b1ceff", "darkblue"],
     "AUTHORIZED": ["#004e3c", "darkgreen"]
   }
+  $("#graficoDiv").show()
   const canvas = document.getElementById('grafico');
 
   // Verifica se o elemento canvas existe
@@ -375,6 +380,7 @@ function criarGrafico(grafico, status) {
       }
     }
   });
+
 }
 
 
